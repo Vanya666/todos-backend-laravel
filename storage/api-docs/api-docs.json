@@ -1,0 +1,344 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Todo Laravel and Swagger API documentation",
+        "contact": {
+            "email": "example@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api/v1/",
+            "description": "Laravel Swagger API server Todos"
+        }
+    ],
+    "paths": {
+        "/todos": {
+            "get": {
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "Display a listing of the resource",
+                "operationId": "getTodoList",
+                "responses": {
+                    "200": {
+                        "description": "Everything is fine",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModelTodo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModelTodo"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/todo/create": {
+            "post": {
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "Create yet another Todo list",
+                "operationId": "todoCreate",
+                "parameters": [
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Create Todo Description",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "varchar255"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Everything is fine",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModelTodo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModelTodo"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "app_id": [
+                            123
+                        ]
+                    }
+                ]
+            }
+        },
+        "/todo/update": {
+            "put": {
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "Update existing Todos Description",
+                "description": "Returns updated Todo data",
+                "operationId": "updateTodoDesription",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id from Todo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int63"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Update Todo Description",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "varchar255"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModelTodo"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModelTodo"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/todo/complete": {
+            "put": {
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "Update existing Todos Status Complete",
+                "description": "Returns updated Todo data",
+                "operationId": "changeStatusTodoComplete",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "completedIds",
+                                    "completed"
+                                ],
+                                "properties": {
+                                    "completedIds": {
+                                        "format": "array",
+                                        "example": "[1,2,3]"
+                                    },
+                                    "completed": {
+                                        "format": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModelTodo"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/todo/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "Delete existing Todo",
+                "description": "Deletes a record and returns no content, reuired parameter completed ids todos an array",
+                "operationId": "deleteOneTodo",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Todo id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/todos/delete-completed": {
+            "delete": {
+                "tags": [
+                    "Todos"
+                ],
+                "summary": "Delete existing Completed todos",
+                "description": "Deletes a record and returns no content",
+                "operationId": "deleteTodosCompleted",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "selectedIds"
+                                ],
+                                "properties": {
+                                    "selectedIds": {
+                                        "format": "array",
+                                        "example": "[1,2,3]"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity, The given data was invalid."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ModelTodo": {
+                "title": "Todo",
+                "description": "Some simple request createa as Todos",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "description": "Some integer field",
+                        "type": "integer",
+                        "format": "int63",
+                        "example": "123456"
+                    },
+                    "description": {
+                        "title": "Description",
+                        "description": "Some text field",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Make routing list"
+                    },
+                    "completed": {
+                        "title": "Completed",
+                        "description": "Or zero or one",
+                        "type": "integer",
+                        "format": "tinyinteger",
+                        "default": "0"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "X-APP-ID": {
+                "type": "apiKey",
+                "name": "X-APP-ID",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Todos",
+            "description": "Some example pages"
+        }
+    ]
+}
